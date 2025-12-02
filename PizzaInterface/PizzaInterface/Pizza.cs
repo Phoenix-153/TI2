@@ -10,14 +10,14 @@ namespace Pizzabestellungen
     {
         private string _name;
         private double _preis;
-        private bool _visible;
+        private int _pnr;
 
 
-        public Pizza(string name, double preis, bool visible)
+        public Pizza(string name, double preis, int pnr)
         {
             this._name = name;
-            this._preis = preis; 
-            this._visible = visible;
+            this._preis = preis;
+            _pnr = pnr;
         }
 
         public double Preis
@@ -34,9 +34,9 @@ namespace Pizzabestellungen
             {
             }
         }
-        public bool Visible
+        public int PNR
         {
-            get => _visible;
+            get => _pnr;
             set
             {
             }

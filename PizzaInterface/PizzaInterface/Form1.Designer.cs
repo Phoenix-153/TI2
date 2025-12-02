@@ -28,48 +28,80 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            textBox1 = new TextBox();
-            label1 = new Label();
+            b_ok = new Button();
+            lable_pizzaeingeben = new Label();
+            cb_Pizzerien = new ComboBox();
+            cb_kundenNummer = new ComboBox();
+            l_kundennummer = new Label();
+            b_bestellhistorie = new Button();
             SuspendLayout();
             // 
-            // button1
+            // b_ok
             // 
-            button1.Location = new Point(232, 134);
-            button1.Margin = new Padding(4, 5, 4, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(107, 38);
-            button1.TabIndex = 0;
-            button1.Text = "OK";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            b_ok.Location = new Point(184, 80);
+            b_ok.Name = "b_ok";
+            b_ok.Size = new Size(75, 23);
+            b_ok.TabIndex = 0;
+            b_ok.Text = "Bestellen";
+            b_ok.UseVisualStyleBackColor = true;
+            b_ok.Click += button1_Click;
             // 
-            // textBox1
+            // lable_pizzaeingeben
             // 
-            textBox1.Location = new Point(23, 141);
-            textBox1.Margin = new Padding(4, 5, 4, 5);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(141, 31);
-            textBox1.TabIndex = 1;
+            lable_pizzaeingeben.AutoSize = true;
+            lable_pizzaeingeben.Location = new Point(16, 62);
+            lable_pizzaeingeben.Margin = new Padding(2, 0, 2, 0);
+            lable_pizzaeingeben.Name = "lable_pizzaeingeben";
+            lable_pizzaeingeben.Size = new Size(211, 15);
+            lable_pizzaeingeben.TabIndex = 2;
+            lable_pizzaeingeben.Text = "Bitte die gewünschte Pizzeria eingeben";
             // 
-            // label1
+            // cb_Pizzerien
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(23, 33);
-            label1.Name = "label1";
-            label1.Size = new Size(316, 25);
-            label1.TabIndex = 2;
-            label1.Text = "Bitte die gewünschte Pizzeria eingeben";
+            cb_Pizzerien.FormattingEnabled = true;
+            cb_Pizzerien.Location = new Point(16, 80);
+            cb_Pizzerien.Name = "cb_Pizzerien";
+            cb_Pizzerien.Size = new Size(121, 23);
+            cb_Pizzerien.TabIndex = 3;
+            // 
+            // cb_kundenNummer
+            // 
+            cb_kundenNummer.FormattingEnabled = true;
+            cb_kundenNummer.Location = new Point(16, 27);
+            cb_kundenNummer.Name = "cb_kundenNummer";
+            cb_kundenNummer.Size = new Size(121, 23);
+            cb_kundenNummer.TabIndex = 4;
+            // 
+            // l_kundennummer
+            // 
+            l_kundennummer.AutoSize = true;
+            l_kundennummer.Location = new Point(16, 9);
+            l_kundennummer.Name = "l_kundennummer";
+            l_kundennummer.Size = new Size(97, 15);
+            l_kundennummer.TabIndex = 5;
+            l_kundennummer.Text = "Kundennummer ";
+            // 
+            // b_bestellhistorie
+            // 
+            b_bestellhistorie.Location = new Point(16, 125);
+            b_bestellhistorie.Name = "b_bestellhistorie";
+            b_bestellhistorie.Size = new Size(243, 23);
+            b_bestellhistorie.TabIndex = 6;
+            b_bestellhistorie.Text = "Bestellhistorie anzeigen";
+            b_bestellhistorie.UseVisualStyleBackColor = true;
+            b_bestellhistorie.Click += b_bestellhistorie_Click;
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(362, 195);
-            Controls.Add(label1);
-            Controls.Add(textBox1);
-            Controls.Add(button1);
-            Margin = new Padding(4, 5, 4, 5);
+            ClientSize = new Size(276, 160);
+            Controls.Add(b_bestellhistorie);
+            Controls.Add(l_kundennummer);
+            Controls.Add(cb_kundenNummer);
+            Controls.Add(cb_Pizzerien);
+            Controls.Add(lable_pizzaeingeben);
+            Controls.Add(b_ok);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
@@ -78,8 +110,11 @@
 
         #endregion
 
-        private Button button1;
-        private TextBox textBox1;
-        private Label label1;
+        private Button b_ok;
+        private Label lable_pizzaeingeben;
+        private ComboBox cb_Pizzerien;
+        private ComboBox cb_kundenNummer;
+        private Label l_kundennummer;
+        private Button b_bestellhistorie;
     }
 }

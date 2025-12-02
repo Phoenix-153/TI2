@@ -15,61 +15,32 @@ namespace PizzaInterface
     {
         private Pizzeria _pizzeria;
         private Kunde _kunde;
-        int index;
+        private int größe;
         Bestellung _bestellung;
+        private int _bestellnummer;
 
-        public Form2(Pizzeria Pizzeria, Kunde kunde)
+        public Form2(Pizzeria Pizzeria, Kunde kunde, int bestellnummer)
         {
             InitializeComponent();
             label1.Text = $"Sie bestellen bei: {Pizzeria.Name}";
             _pizzeria = Pizzeria;
             _kunde = kunde;
             _bestellung = null;
-
+            _bestellnummer = bestellnummer;
             foreach (Pizza pizza in _pizzeria.Speisekarte)
             {
-                if (pizza.Visible)
-                {
-                    listBox1.Items.Add(pizza.Name);
-                }
+                lb_Pizzaauswahl.Items.Add(pizza.Name);
             }
-            foreach(ExtraZutat extra in _pizzeria.ExtraZutatlist)
+            foreach (ExtraZutat extra in _pizzeria.ExtraZutatlist)
             {
-                listBox2.Items.Add($"+ {extra.Name} (+{extra.Preis} €)");
+                lb_extrazutaten.Items.Add($"+ {extra.Name} (+{extra.Preis} €)");
             }
         }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form2_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
         private void button2_Click(object sender, EventArgs e)
         {
-            int anzahl = (int)numericUpDown1.Value;
+            int anzahl = (int)nUD_Mengenauswahl.Value;
             RadioButton ausgewählt = groupBox1.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked);
-            if (listBox1.SelectedItem == null)
+            if (lb_Pizzaauswahl.SelectedItem == null)
             {
                 MessageBox.Show("Bitte wählen Sie eine Pizza aus der Liste aus.");
                 return;
@@ -79,12 +50,12 @@ namespace PizzaInterface
                 MessageBox.Show("Bitte wählen Sie eine Größe aus.");
                 return;
             }
-            else if (numericUpDown1.Value <= 0)
+            else if (nUD_Mengenauswahl.Value <= 0)
             {
                 MessageBox.Show("Bitte geben Sie eine gültige Menge ein.");
                 return;
             }
-            else if (numericUpDown1.Value >= 100)
+            else if (nUD_Mengenauswahl.Value >= 100)
             {
                 MessageBox.Show("Sie können maximal 99 Pizzen einer Sorte bestellen");
                 return;
@@ -93,28 +64,40 @@ namespace PizzaInterface
             {
                 if (ausgewählt == radioButton1)
                 {
-                    index = 1;
+                    größe = 28;
                 }
                 else if (ausgewählt == radioButton2)
                 {
-                    index = 2;
+                    größe = 32;
                 }
                 else if (ausgewählt == radioButton3)
                 {
-                    index = 3;
+                    größe = 40;
                 }
+
+                List<ExtraZutat> ExtraZutaten = new List<ExtraZutat>();
+
+                // alle ausgewählten Indizes durchgehen
+                foreach (int index in lb_extrazutaten.SelectedIndices)
+                {
+                    // hole die ExtraZutat mit demselben Index aus der Pizzeria-Liste
+                    ExtraZutat extra = new ExtraZutat(_pizzeria.ExtraZutatlist[index].Name, _pizzeria.ExtraZutatlist[index].Preis);
+
+                    // füge sie zur aktuellen Bestellliste hinzu
+                    ExtraZutaten.Add(extra);
+                }
+
 
 
                 if (_bestellung == null)
                 {
-                    _bestellung = new Bestellung(new Bestellposition(anzahl, _pizzeria, (listBox1.SelectedIndex * 4 + index)), _pizzeria, _kunde);
+                    _bestellung = new Bestellung(new Bestellposition(anzahl, _pizzeria, lb_Pizzaauswahl.SelectedIndex, größe, ExtraZutaten), _pizzeria, _kunde, _bestellnummer);
                 }
                 else
                 {
-                    for (int i = 0; i < numericUpDown1.Value; i++)
+                    for (int i = 0; i < nUD_Mengenauswahl.Value; i++)
                     {
-                        _bestellung.fuegePositionHinzu((listBox1.SelectedIndex * 4 + index));
-
+                        _bestellung.FuegePositionHinzu(lb_Pizzaauswahl.SelectedIndex, größe, ExtraZutaten);
                     }
                 }
 
@@ -122,32 +105,34 @@ namespace PizzaInterface
                 listView2.Items.Clear();
                 foreach (Bestellposition position in _bestellung.Bestellpositionen)
                 {
-                    ListViewItem item = new ListViewItem(position.BestellpositionAnzahl.ToString());
+                    ListViewItem item = new ListViewItem(position.Menge.ToString());
                     item.SubItems.Add(position.Pizza.Name);
-                    item.SubItems.Add($"{position.Pizza.Preis} €");
+                    item.SubItems.Add(position.Größe.ToString());
+                    string extrasString = "" + string.Join(", ", position.ExtraZutaten.Select(z => $"{z.Name} ({z.Preis:F2} €)"));
+                    item.SubItems.Add(extrasString);
+                    item.SubItems.Add($"{position.BerechnePreis()} €");
                     listView2.Items.Add(item);
                 }
 
-                double preis = _bestellung.berechnePreis();
-                double Gesamtpreis = Bestellung.berechnePreisMitRabatt(preis, textBox3.Text);
+                double Gesamtpreis = _bestellung.berechnePreis();
                 textBox2.Text = $"{Gesamtpreis} €";
 
             }
         }
 
-        private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label8_Click(object sender, EventArgs e)
-        {
-
+            if (_bestellung != null)
+            {
+                Form form3 = new Form3(_bestellung, _kunde, _pizzeria);
+                form3.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Sie müssen mindestens eine Pizza bestellen");
+                return;
+            }
         }
     }
 }
